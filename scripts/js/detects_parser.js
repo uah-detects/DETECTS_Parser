@@ -46,8 +46,17 @@ function readDataFile(e) {
                 notWorkIndex.push(j);
               }
             }
-
+            console.log(notWorkIndex.length);
             console.log(notWorkIndex);
+
+            if(notWorkIndex.length != 0)
+            {
+              $( ".badData" ).append( "<p> Bad Data </p>" );
+              for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
+              {
+                $( ".badData" ).append( "<p>"+bodyArray[0][j]+" "+bodyArray[1][j]+" "+bodyArray[2][j]+" "+bodyArray[3][j]+" "+bodyArray[4][j]+" "+bodyArray[5][j]+" "+bodyArray[6][j]+" "+bodyArray[7][j]+"</p>" );
+              }
+            }
 
             console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
         }
