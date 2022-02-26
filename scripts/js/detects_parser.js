@@ -38,12 +38,18 @@ function readDataFile(e) {
             bodyDataArray = bodyArray;
 
             // regex Expression for comment section: /" StrTrk\s\d\d\s\d\s\d\.\d\dV\s\d\dC\s\d\d\d\d\dPa "/i
-
-            /*for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
+            var notWorkIndex = [];
+            for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
             {
+              if(commentRegex(bodyArray[7][j]) == false)
+              {
+                notWorkIndex.push(j);
+              }
+            }
 
-            }*/
-            console.log(useRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
+            console.log(notWorkIndex);
+
+            console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
         }
 
         
@@ -53,12 +59,21 @@ function readDataFile(e) {
 
 window.onload = function ()
 {
-    console.log(useRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
+    console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
 };
 
-function useRegex(input) {
-    let regex = /StrTrk\s[0-9]{1-4}\s[0-9]\s[0-9]\.[0-9]{1-2}V\s[0-9]{1-2}C\s[0-9]{1-6}Pa/i;
-    return regex.test(input);
+function commentRegex(input) {
+  /* Regex Broken Down:
+  /StrTrk\s : Identifier
+  (([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})) : Packet # Max of 4 digits
+  \s[0-9] : Radio Score
+  \s[0-9]\.(([0-9]{2})|([0-9]{1}))V : Voltage One digit . up to two digits V
+  \s-?(([0-9]{2})|([0-9]{1}))C  : Temperature Possible negative up to two digits C
+  \s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i   : Pressure up to 6 digits Pa
+  */                 
+  let regex = /StrTrk\s(([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))\s[0-9]\s[0-9]\.(([0-9]{2})|([0-9]{1}))V\s-?(([0-9]{2})|([0-9]{1}))C\s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i;
+ 
+  return regex.test(input);
 }
 
 function verificationHeaderCheck(headerLine)
