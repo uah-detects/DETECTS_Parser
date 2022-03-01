@@ -37,6 +37,8 @@ function readDataFile(e) {
             headerDataArray = headerLine;
             bodyDataArray = bodyArray;
 
+            //verify header
+
             // regex Expression for comment section: /" StrTrk\s\d\d\s\d\s\d\.\d\dV\s\d\dC\s\d\d\d\d\dPa "/i
             var notWorkIndex = [];
             for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
@@ -70,6 +72,11 @@ window.onload = function ()
 {
     console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
 };
+
+function verifyData(input)
+{
+  
+}
 
 function commentRegex(input) {
   /* Regex Broken Down:
