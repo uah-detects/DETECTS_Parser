@@ -48,9 +48,9 @@ function readDataFile(e) {
               {
                 notWorkIndex.push(j);
               }
-            }
+            }*/
             console.log(notWorkIndex.length);
-            console.log(notWorkIndex);*/
+            console.log(notWorkIndex);
 
             if(notWorkIndex.length != 0)
             {
@@ -80,18 +80,24 @@ function verifyData(input)
 
   for(let j = 0; j < input[0].length; j++)            //First loop is looping through the file line by line
   {
-
+    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s+([0-9]{2}):([0-9]{2}):([0-9]{2})/i;
+    let regexTimeFormTwo = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s+([0-9]{2}):([0-9]{2}):([0-9]{2})/i;
     //NEED TO ADD REGEX FOR DATE TO Check it is returning correct form
-
-    const dateTime = Date.parse(input[0][0]);
-    const dateLastTime = Date.parse(input[0][1]);
-    if(isNaN(dateTime))
-    {
-      badDataLineIndex.push(j);
+//2021-06-01\s+16:54:14
+    if(regexTime.test(input[0][j]) == false){
+      const dateTime = Date.parse(input[0][j]);
+      if(isNaN(dateTime))
+      {
+        badDataLineIndex.push(j);
+      }
     }
-    if(isNaN(dateLastTime))
-    {
-      badDataLineIndex.push(j);
+    if(regexTime.test(input[1][j]) == false){
+      const dateLastTime = Date.parse(input[1][j]);
+
+      if(isNaN(dateLastTime))
+      {
+        badDataLineIndex.push(j);
+      }
     }
     if(commentRegex(input[7][j]) == false)
     {
