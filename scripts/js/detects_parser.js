@@ -38,10 +38,11 @@ function readDataFile(e) {
             bodyDataArray = bodyArray;
 
             //verify header
-
+            
             // regex Expression for comment section: /" StrTrk\s\d\d\s\d\s\d\.\d\dV\s\d\dC\s\d\d\d\d\dPa "/i
             var notWorkIndex = [];
-            for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
+            notWorkIndex = verifyData(bodyArray);
+            /*for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
             {
               if(commentRegex(bodyArray[7][j]) == false)
               {
@@ -49,14 +50,14 @@ function readDataFile(e) {
               }
             }
             console.log(notWorkIndex.length);
-            console.log(notWorkIndex);
+            console.log(notWorkIndex);*/
 
             if(notWorkIndex.length != 0)
             {
               $( ".badData" ).append( "<p> Bad Data </p>" );
               for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
               {
-                $( ".badData" ).append( "<p>"+bodyArray[0][j]+" "+bodyArray[1][j]+" "+bodyArray[2][j]+" "+bodyArray[3][j]+" "+bodyArray[4][j]+" "+bodyArray[5][j]+" "+bodyArray[6][j]+" "+bodyArray[7][j]+"</p>" );
+                $( ".badData" ).append( "<p>"+bodyArray[0][notWorkIndex[j]]+" "+bodyArray[1][notWorkIndex[j]]+" "+bodyArray[2][notWorkIndex[j]]+" "+bodyArray[3][notWorkIndex[j]]+" "+bodyArray[4][notWorkIndex[j]]+" "+bodyArray[5][notWorkIndex[j]]+" "+bodyArray[6][notWorkIndex[j]]+" "+bodyArray[7][notWorkIndex[j]]+"</p>" );
               }
             }
 
@@ -75,7 +76,29 @@ window.onload = function ()
 
 function verifyData(input)
 {
-  
+  var badDataLineIndex = [];
+
+  for(let j = 0; j < input[0].length; j++)            //First loop is looping through the file line by line
+  {
+
+    //NEED TO ADD REGEX FOR DATE TO Check it is returning correct form
+
+    const dateTime = Date.parse(input[0][0]);
+    const dateLastTime = Date.parse(input[0][1]);
+    if(isNaN(dateTime))
+    {
+      badDataLineIndex.push(j);
+    }
+    if(isNaN(dateLastTime))
+    {
+      badDataLineIndex.push(j);
+    }
+    if(commentRegex(input[7][j]) == false)
+    {
+      badDataLineIndex.push(j);
+    }
+  }
+  return badDataLineIndex
 }
 
 function commentRegex(input) {
