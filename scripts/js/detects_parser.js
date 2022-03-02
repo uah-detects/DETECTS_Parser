@@ -80,30 +80,41 @@ function verifyData(input)
 
   for(let j = 0; j < input[0].length; j++)            //First loop is looping through the file line by line
   {
-    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s+([0-9]{2}):([0-9]{2}):([0-9]{2})/i;
-    let regexTimeFormTwo = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s+([0-9]{2}):([0-9]{2}):([0-9]{2})/i;
+    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
+    let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
     //NEED TO ADD REGEX FOR DATE TO Check it is returning correct form
 //2021-06-01\s+16:54:14
-    if(regexTime.test(input[0][j]) == false){
+    if(regexTimeFormOne.test(input[0][j]) == false && regexTimeFormTwo.test(input[0][j]) == false){
       const dateTime = Date.parse(input[0][j]);
-      if(isNaN(dateTime))
-      {
+
+      if(isNaN(dateTime)){
         badDataLineIndex.push(j);
       }
-    }
-    if(regexTime.test(input[1][j]) == false){
+
+    } else if(regexTimeFormOne.test(input[1][j]) == false && regexTimeFormTwo.test(input[1][j]) == false){
       const dateLastTime = Date.parse(input[1][j]);
 
-      if(isNaN(dateLastTime))
-      {
+      if(isNaN(dateLastTime)){
         badDataLineIndex.push(j);
       }
-    }
-    if(commentRegex(input[7][j]) == false)
-    {
+      
+    } else if(isNaN(input[2][j]) || input[2][j] === ""){
       badDataLineIndex.push(j);
+    } else if(isNaN(input[3][j]) || input[3][j] === ""){
+      badDataLineIndex.push(j);
+    } else if(isNaN(input[4][j]) || input[4][j] === ""){
+      badDataLineIndex.push(j);
+    } else if(isNaN(input[5][j]) || input[5][j] === ""){
+      badDataLineIndex.push(j);
+    } else if(isNaN(input[6][j]) || input[6][j] === ""){
+      badDataLineIndex.push(j);
+    } else if(commentRegex(input[7][j]) == false){
+      badDataLineIndex.push(j);
+    } else {
+      //Do nothing dataline is Within the tolerances
     }
   }
+  console.log(badDataLineIndex);
   return badDataLineIndex
 }
 
