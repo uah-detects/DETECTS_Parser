@@ -50,8 +50,14 @@ function readDataFile(e) {
             console.log(notWorkIndex.length);
             console.log(notWorkIndex);
 
+
+
             if(notWorkIndex.length != 0)
             {
+              var output = [];
+              output = identifyBadDataSection(notWorkIndex,bodyArray);
+              console.log(output);
+
               $( ".badData" ).append( "<p> Bad Data </p>" );
               for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
               {
@@ -98,7 +104,7 @@ function verifyData(input)
     let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
     let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
     //NEED TO ADD REGEX FOR DATE TO Check it is returning correct form
-//2021-06-01\s+16:54:14
+    //2021-06-01\s+16:54:14
     if(regexTimeFormOne.test(input[0][j]) == false && regexTimeFormTwo.test(input[0][j]) == false){
       const dateTime = Date.parse(input[0][j]);
 
@@ -131,6 +137,71 @@ function verifyData(input)
   }
   console.log(badDataLineIndex);
   return badDataLineIndex
+}
+
+function identifyBadDataSection(badDataIndexArray,dataInputArray)
+{
+  var dataArray = [];
+
+  for(let i = 0; i < badDataIndexArray.length; i++)                         //Creating each array column of the multidimensional Array
+  {
+      dataArray.push([]);
+  }
+  console.log(dataArray);
+
+  
+
+  for(let j = 0; j < badDataIndexArray.length; j++)            //First loop is looping through the file line by line Note: loop starts at one to leave off the header title that is stored in position 0 of the subarray
+  {
+    var dataColumnErrorArr = []; // Position zero contains the row index and all following positions are rows that contain an error
+    dataColumnErrorArr.push(badDataIndexArray[j]);
+
+    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
+    let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
+ 
+    if(regexTimeFormOne.test(dataInputArray[0][badDataIndexArray[j]]) == false && regexTimeFormTwo.test(dataInputArray[0][badDataIndexArray[j]]) == false){
+      const dateTime = Date.parse(dataInputArray[0][badDataIndexArray[j]]);
+
+      if(isNaN(dateTime)){
+        dataColumnErrorArr.push(0);
+      }
+
+    }
+    if(regexTimeFormOne.test(dataInputArray[1][badDataIndexArray[j]]) == false && regexTimeFormTwo.test(dataInputArray[1][badDataIndexArray[j]]) == false){
+      const dateLastTime = Date.parse(dataInputArray[1][badDataIndexArray[j]]);
+
+      if(isNaN(dateLastTime)){
+        dataColumnErrorArr.push(1);
+      }
+      
+    }
+    if(isNaN(dataInputArray[2][badDataIndexArray[j]]) || dataInputArray[2][badDataIndexArray[j]] === ""){
+      dataColumnErrorArr.push(2);
+    }
+    if(isNaN(dataInputArray[3][badDataIndexArray[j]]) || dataInputArray[3][badDataIndexArray[j]] === ""){
+      dataColumnErrorArr.push(3);
+    }
+    if(isNaN(dataInputArray[4][badDataIndexArray[j]]) || dataInputArray[4][badDataIndexArray[j]] === ""){
+      dataColumnErrorArr.push(4);
+    }
+    if(isNaN(dataInputArray[5][badDataIndexArray[j]]) || dataInputArray[5][badDataIndexArray[j]] === ""){
+      dataColumnErrorArr.push(5);
+    }
+    if(isNaN(dataInputArray[6][badDataIndexArray[j]]) || dataInputArray[6][badDataIndexArray[j]] === ""){
+      dataColumnErrorArr.push(6);
+    }
+    if(commentRegex(dataInputArray[7][badDataIndexArray[j]]) == false){
+      dataColumnErrorArr.push(7);
+    }
+
+    dataArray[j].push(dataColumnErrorArr);
+    /*for(let k = 0; k < badDataIndexArray.length - 1; k++)                       //Looping through each line item, item by item
+    {
+      
+    }*/
+
+  }
+  return dataArray;
 }
 
 function commentRegex(input) {
