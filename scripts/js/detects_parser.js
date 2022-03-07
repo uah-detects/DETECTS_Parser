@@ -270,4 +270,34 @@ function splitBody(headerSize,fileContentArray)
   return dataArray;
 }
 
+
+const inputs = document.querySelectorAll('input');
+
+const patterns = {
+  timeInput: /^[a-z\d]{5,12}$/i,
+  lastTimeInput: /^[\d\w@-]{8,20}$/i,
+  latInput: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+  lngInput: /^\d{3}-\d{3}-\d{4}$/,
+  speedInput: /^[a-z\d]{5,12}$/i,
+  courseInput: /^[\d\w@-]{8,20}$/i,
+  altitudeInput: /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/,
+  temperatureInput: /^\d{3}-\d{3}-\d{4}$/,
+  pressureInput: /^\d{3}-\d{3}-\d{4}$/
+};
+
+inputs.forEach((input) => {
+  input.addEventListener('keyup', (e) => {
+    validate(e.target, patterns[e.target.attributes.id.value]);
+  });
+});
+
+function validate(field, regex) {
+  if (regex.test(field.value)) {
+    field.className = 'form-control valid';
+  } else {
+    field.className = 'form-control invalid';
+  }
+}
+
+
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
