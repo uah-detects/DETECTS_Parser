@@ -19,6 +19,14 @@ h1 {
 body {
   background-color: #6c757d;
 }
+p {
+  margin-bottom: 0.5rem;
+  text-align: right;
+  display: block;
+  letter-spacing: 2px;
+  color: #adb5bd;
+  text-transform: uppercase;
+}
 small {
   color: lightblue;
 }

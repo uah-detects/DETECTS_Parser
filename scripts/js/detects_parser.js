@@ -274,8 +274,8 @@ function splitBody(headerSize,fileContentArray)
 const inputs = document.querySelectorAll('input');
 
 const patterns = {
-  timeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})$/i,
-  lastTimeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})$/i,
+  timeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2}):([0-9]{2})$/i,
+  lastTimeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2}):([0-9]{2})$/i,
   latInput: /^(-?([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
   lngInput: /^(-?([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
   speedInput: /^-?(([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))$/i,
@@ -294,10 +294,16 @@ inputs.forEach((input) => {
 function validate(field, regex) {
   if (regex.test(field.value)) {
     field.className = 'form-control valid';
+    document.getElementById("submitButton").disabled = false;
   } else {
     field.className = 'form-control invalid';
+    document.getElementById("submitButton").disabled = true;
   }
 }
 
+
+$('#submitButton').click(function(){
+console.log("TESTER");
+});
 
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
