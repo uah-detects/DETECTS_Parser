@@ -301,9 +301,8 @@ function validate(field, regex) {
   }
 }
 
-
-$('#submitButton').click(function(){
-console.log("TESTER");
+$('#form').submit(function (e) {
+  e.preventDefault();
 });
 
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
