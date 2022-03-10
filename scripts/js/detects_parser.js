@@ -7,7 +7,10 @@ var erroredIndexesAndPosition = [];
 // 0 = Hidden, 1 = Shown
 var fieldStateBinaryString = [0,0,0,0,0,0,0,0,0];
 
-
+window.onload = function ()
+{
+    //console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
+};
 
 function readDataFile(e) {
 
@@ -63,8 +66,9 @@ function readDataFile(e) {
               console.log(erroredIndexesAndPosition);
               console.log(erroredIndexesAndPosition[0][0].length);
               var firstBadIndex = erroredIndexesAndPosition[0][0][0];
-              $( ".badData" ).append( "<p>"+bodyArray[0][notWorkIndex[firstBadIndex]]+" "+bodyArray[1][notWorkIndex[firstBadIndex]]+" "+bodyArray[2][notWorkIndex[firstBadIndex]]+" "+bodyArray[3][notWorkIndex[firstBadIndex]]+" "+bodyArray[4][notWorkIndex[firstBadIndex]]+" "+bodyArray[5][notWorkIndex[firstBadIndex]]+" "+bodyArray[6][notWorkIndex[firstBadIndex]]+" "+bodyArray[7][notWorkIndex[firstBadIndex]]+"</p>" );
-              toggleDataCorrectionFields (erroredIndexesAndPosition[1][0]);
+              console.log(firstBadIndex);
+              $( ".badData" ).append( "<p>"+bodyArray[0][firstBadIndex]+" "+bodyArray[1][firstBadIndex]+" "+bodyArray[2][firstBadIndex]+" "+bodyArray[3][firstBadIndex]+" "+bodyArray[4][firstBadIndex]+" "+bodyArray[5][firstBadIndex]+" "+bodyArray[6][firstBadIndex]+" "+bodyArray[7][firstBadIndex]+"</p>" );
+              toggleDataCorrectionFields (erroredIndexesAndPosition[0][0]);
              /* $( ".badData" ).append( "<p> Bad Data </p>" );
               for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
               {
@@ -100,10 +104,7 @@ function readDataFile(e) {
       reader.readAsText(file);
 }
 
-window.onload = function ()
-{
-    console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
-};
+
 
 function toggleDataCorrectionFields (DataIndex)
 {
@@ -112,28 +113,38 @@ function toggleDataCorrectionFields (DataIndex)
   {
     switch(DataIndex[j]) {
       case 0:
-        console.log("WORKING!");
+        document.getElementsByClassName("form-groupTime")[0].disabled = false;
+        document.getElementsByClassName("form-groupTime")[0].hidden= false;
         break;
       case 1:
-        console.log("NOT WORKING!");
+        document.getElementsByClassName("form-groupLastTime")[0].disabled = false;
+        document.getElementsByClassName("form-groupLastTime")[0].hidden= false;
         break;
       case 2:
-        console.log("WORKING!");
+        document.getElementsByClassName("form-groupLat")[0].disabled = false;
+        document.getElementsByClassName("form-groupLat")[0].hidden= false;
         break;
       case 3:
-        console.log("NOT WORKING!");
+        document.getElementsByClassName("form-groupLng")[0].disabled = false;
+        document.getElementsByClassName("form-groupLng")[0].hidden = false;
         break;
       case 4:
-        console.log("WORKING!");
+        document.getElementsByClassName("form-groupSpeed")[0].disabled = false;
+        document.getElementsByClassName("form-groupSpeed")[0].hidden = false;
         break;
       case 5:
-        console.log("NOT WORKING!");
+        document.getElementsByClassName("form-groupCourse")[0].disabled = false;
+        document.getElementsByClassName("form-groupCourse")[0].hidden = false;
         break;
       case 6:
-        console.log("WORKING!");
+        document.getElementsByClassName("form-groupTemperature")[0].disabled = false;
+        document.getElementsByClassName("form-groupAltitude")[0].hidden = false;
         break;
       case 7:
-        //document.getElementsByClassName("headerErrorNotice").disabled=true;
+        document.getElementsByClassName("form-groupTemperature")[0].disabled = false;
+        document.getElementsByClassName("form-groupPressure")[0].disabled = false;
+        document.getElementsByClassName("form-groupTemperature")[0].hidden = false;
+        document.getElementsByClassName("form-groupPressure")[0].hidden = false;
         break;
       default:
         // code block
@@ -420,6 +431,8 @@ function validate(field, regex) {
 $('#form').submit(function (e) {
   e.preventDefault();
   hideAllInputFields ();
+  document.getElementById('badData').innerHTML = "";
+  //$("#badData").innerHTML = "";
 });
 
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
