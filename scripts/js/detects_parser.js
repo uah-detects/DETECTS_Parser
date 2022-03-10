@@ -2,6 +2,11 @@ var headerDataArray = [];
 var bodyDataArray = [];
 var rawFileVerificationHeaderArray = ["time","lasttime","lat","lng","speed","course","altitude","comment"];
 
+var erroredIndexesAndPosition = [];
+//Index 0 = Time, Index 1 = LastTime, Index 2 = Latitude, Index 3 = Longitude, Index 4 = Speed, Index 5  = Course, Index 6 = Altitude , Index 7 = Temperature, Index 8 = Pressure
+// 0 = Hidden, 1 = Shown
+var fieldStateBinaryString = [0,0,0,0,0,0,0,0,0];
+
 
 
 function readDataFile(e) {
@@ -54,15 +59,20 @@ function readDataFile(e) {
 
             if(notWorkIndex.length != 0)
             {
-              var output = [];
-              output = identifyBadDataSection(notWorkIndex,bodyArray);
-              console.log(output);
-
-              $( ".badData" ).append( "<p> Bad Data </p>" );
+              erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
+              console.log(erroredIndexesAndPosition);
+              console.log(erroredIndexesAndPosition[0][0].length);
+              var firstBadIndex = erroredIndexesAndPosition[0][0][0];
+              $( ".badData" ).append( "<p>"+bodyArray[0][notWorkIndex[firstBadIndex]]+" "+bodyArray[1][notWorkIndex[firstBadIndex]]+" "+bodyArray[2][notWorkIndex[firstBadIndex]]+" "+bodyArray[3][notWorkIndex[firstBadIndex]]+" "+bodyArray[4][notWorkIndex[firstBadIndex]]+" "+bodyArray[5][notWorkIndex[firstBadIndex]]+" "+bodyArray[6][notWorkIndex[firstBadIndex]]+" "+bodyArray[7][notWorkIndex[firstBadIndex]]+"</p>" );
+              toggleDataCorrectionFields (erroredIndexesAndPosition[1][0]);
+             /* $( ".badData" ).append( "<p> Bad Data </p>" );
               for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
               {
                 $( ".badData" ).append( "<p>"+bodyArray[0][notWorkIndex[j]]+" "+bodyArray[1][notWorkIndex[j]]+" "+bodyArray[2][notWorkIndex[j]]+" "+bodyArray[3][notWorkIndex[j]]+" "+bodyArray[4][notWorkIndex[j]]+" "+bodyArray[5][notWorkIndex[j]]+" "+bodyArray[6][notWorkIndex[j]]+" "+bodyArray[7][notWorkIndex[j]]+"</p>" );
-              }
+              }*/
+
+              // Change the fieldStateBinaryString to reflect the fields that need to be turned on
+
             }
 
             console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
@@ -94,6 +104,112 @@ window.onload = function ()
 {
     console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
 };
+
+function toggleDataCorrectionFields (DataIndex)
+{
+  console.log(DataIndex);
+  for(let j = 1; j < DataIndex.length; j++)            //First loop is looping through the file line by line
+  {
+    switch(DataIndex[j]) {
+      case 0:
+        console.log("WORKING!");
+        break;
+      case 1:
+        console.log("NOT WORKING!");
+        break;
+      case 2:
+        console.log("WORKING!");
+        break;
+      case 3:
+        console.log("NOT WORKING!");
+        break;
+      case 4:
+        console.log("WORKING!");
+        break;
+      case 5:
+        console.log("NOT WORKING!");
+        break;
+      case 6:
+        console.log("WORKING!");
+        break;
+      case 7:
+        //document.getElementsByClassName("headerErrorNotice").disabled=true;
+        break;
+      default:
+        // code block
+    }
+  }
+}
+
+function clearAllInputFields ()
+{
+  //Clear All input
+  document.getElementById('timeInput').value = '';
+  document.getElementById('lastTimeInput').value = '';
+  document.getElementById('latInput').value = '';
+  document.getElementById('lngInput').value = '';
+  document.getElementById('speedInput').value = '';
+  document.getElementById('courseInput').value = '';
+  document.getElementById('altitudeInput').value = '';
+  document.getElementById('temperatureInput').value = '';
+  document.getElementById('pressureInput').value = '';
+
+  //Clearing Validation UI
+  var time = document.getElementById('timeInput');
+  time.className = 'form-control';
+
+  var lastTime = document.getElementById('lastTimeInput');
+  lastTime.className = 'form-control';
+
+  var lat = document.getElementById('latInput');
+  lat.className = 'form-control';
+
+  var lng = document.getElementById('lngInput');
+  lng.className = 'form-control';
+
+  var speed = document.getElementById('speedInput');
+  speed.className = 'form-control';
+
+  var course = document.getElementById('courseInput');
+  course.className = 'form-control';
+
+  var altitude = document.getElementById('altitudeInput');
+  altitude.className = 'form-control';
+
+  var temperature = document.getElementById('temperatureInput');
+  temperature.className = 'form-control';
+
+  var pressure = document.getElementById('pressureInput');
+  pressure.className = 'form-control';
+
+}
+
+function hideAllInputFields ()
+{
+  clearAllInputFields ();
+  document.getElementsByClassName("form-groupTime")[0].disabled = true;
+  document.getElementsByClassName("form-groupLastTime")[0].disabled = true;
+  document.getElementsByClassName("form-groupLat")[0].disabled = true;
+  document.getElementsByClassName("form-groupLng")[0].disabled = true;
+  document.getElementsByClassName("form-groupSpeed")[0].disabled = true;
+  document.getElementsByClassName("form-groupCourse")[0].disabled = true;
+  document.getElementsByClassName("form-groupAltitude")[0].disabled = true;
+  document.getElementsByClassName("form-groupTemperature")[0].disabled = true;
+  document.getElementsByClassName("form-groupPressure")[0].disabled = true;
+
+  document.getElementsByClassName("form-groupTime")[0].hidden=true;
+  document.getElementsByClassName("form-groupLastTime")[0].hidden= true;
+  document.getElementsByClassName("form-groupLat")[0].hidden= true;
+  document.getElementsByClassName("form-groupLng")[0].hidden = true;
+  document.getElementsByClassName("form-groupSpeed")[0].hidden = true;
+  document.getElementsByClassName("form-groupCourse")[0].hidden = true;
+  document.getElementsByClassName("form-groupAltitude")[0].hidden = true;
+  document.getElementsByClassName("form-groupTemperature")[0].hidden = true;
+  document.getElementsByClassName("form-groupPressure")[0].hidden = true;
+
+  //document.getElementById("submitButton").disabled=true;
+  //document.getElementById("submitButton").hidden=true;
+}
 
 function verifyData(input)
 {
@@ -303,6 +419,7 @@ function validate(field, regex) {
 
 $('#form').submit(function (e) {
   e.preventDefault();
+  hideAllInputFields ();
 });
 
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
