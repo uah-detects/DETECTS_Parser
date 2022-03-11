@@ -5,6 +5,9 @@ var rawFileVerificationHeaderArray = ["time","lasttime","lat","lng","speed","cou
 
 var erroredIndexesAndPosition = [];
 var erroredIndexLastPosition = -1;
+var deleteIndexArray = [];
+
+var deleteButtonPressed = false;
 
 window.onload = function ()
 {
@@ -63,8 +66,8 @@ function readDataFile(e) {
             {
               erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyDataArray);
               console.log(erroredIndexesAndPosition);
-              console.log(erroredIndexesAndPosition[1][0]);
-              console.log(erroredIndexesAndPosition[0][0].length);
+              console.log(erroredIndexesAndPosition[0][0]);
+              console.log(erroredIndexesAndPosition.length);
               nextErroredIndexLastPosition();
               var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
               console.log(firstBadIndex);
@@ -77,7 +80,7 @@ function readDataFile(e) {
               }*/
 
               // Change the fieldStateBinaryString to reflect the fields that need to be turned on
-
+              document.getElementById("deleteButton").disabled = false;
             }
 
             console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
@@ -107,7 +110,9 @@ function readDataFile(e) {
 
 function nextErroredIndexLastPosition()
 {
-  if(erroredIndexLastPosition < erroredIndexesAndPosition[0][0].length)
+  console.log(erroredIndexLastPosition);
+  console.log(erroredIndexesAndPosition.length);
+  if(erroredIndexLastPosition + 1 < erroredIndexesAndPosition.length)
   {
     erroredIndexLastPosition++;
   }
@@ -547,29 +552,32 @@ function formComplete()
 function submisionAction()
 {
 //correctedDataFields
-
+  var lastPos = erroredIndexLastPosition;
   nextErroredIndexLastPosition();
+  console.log(erroredIndexLastPosition);
+
+  var correctedArray = [];
+  console.log(erroredIndexLastPosition);
+
+  var currentIndex = erroredIndexesAndPosition[lastPos][0][0];
+  correctedArray.push(currentIndex);
+
+  correctedArray.push(document.getElementById('timeInput').value);
+  correctedArray.push(document.getElementById('lastTimeInput').value);
+  correctedArray.push(document.getElementById('latInput').value);
+  correctedArray.push(document.getElementById('lngInput').value);
+  correctedArray.push(document.getElementById('speedInput').value);
+  correctedArray.push(document.getElementById('courseInput').value);
+  correctedArray.push(document.getElementById('altitudeInput').value);
+  correctedArray.push(document.getElementById('temperatureInput').value);
+  correctedArray.push(document.getElementById('pressureInput').value);
+
+
+  correctedDataFields.push(correctedArray);
 
   if(erroredIndexLastPosition != -1)
   {
-    var correctedArray = [];
-    console.log(erroredIndexLastPosition);
 
-    var currentIndex = erroredIndexesAndPosition[0][0][erroredIndexLastPosition];
-    correctedArray.push(currentIndex);
-
-    correctedArray.push(document.getElementById('timeInput').value);
-    correctedArray.push(document.getElementById('lastTimeInput').value);
-    correctedArray.push(document.getElementById('latInput').value);
-    correctedArray.push(document.getElementById('lngInput').value);
-    correctedArray.push(document.getElementById('speedInput').value);
-    correctedArray.push(document.getElementById('courseInput').value);
-    correctedArray.push(document.getElementById('altitudeInput').value);
-    correctedArray.push(document.getElementById('temperatureInput').value);
-    correctedArray.push(document.getElementById('pressureInput').value);
-
-
-    correctedDataFields.push(correctedArray);
 
     //erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
     //console.log(erroredIndexesAndPosition);
@@ -584,20 +592,94 @@ function submisionAction()
     console.log(firstBadIndex);
     $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
     toggleDataCorrectionFields (erroredIndexesAndPosition[erroredIndexLastPosition][0]);
+    console.log("Corrected");
     console.log(correctedDataFields);
+    console.log("Deleted");
+    console.log(deleteIndexArray);
   }
   else{
+    //clearing form
+    hideAllInputFields ();
+    document.getElementById('badData').innerHTML = "";
+    console.log("Corrected");
     console.log(correctedDataFields);
+    console.log("Deleted");
+    console.log(deleteIndexArray);
   }
 
 }
 
+function deleteAction()
+{
+
+  //deleteIndexArray
+  var lastPos = erroredIndexLastPosition;
+  nextErroredIndexLastPosition();
+  console.log(erroredIndexLastPosition);
+
+  var deleteIndex= erroredIndexesAndPosition[lastPos][0][0];
+  deleteIndexArray.push(deleteIndex);
+
+  if(erroredIndexLastPosition != -1)
+  {
+
+
+    //erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
+    //console.log(erroredIndexesAndPosition);
+    //console.log(erroredIndexesAndPosition[0][0].length);
+    //nextErroredIndexLastPosition();
+
+    //clearing form and setting up for next input
+    hideAllInputFields ();
+    document.getElementById('badData').innerHTML = "";
+
+    var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
+    console.log(firstBadIndex);
+    $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+    toggleDataCorrectionFields (erroredIndexesAndPosition[erroredIndexLastPosition][0]);
+    console.log("Corrected");
+    console.log(correctedDataFields);
+    console.log("Deleted");
+    console.log(deleteIndexArray);
+  }
+  else{
+    //clearing form
+    hideAllInputFields ();
+    document.getElementById('badData').innerHTML = "";
+    console.log("Corrected");
+    console.log( correctedDataFields);
+    console.log("Deleted");
+    console.log(deleteIndexArray);
+  }
+
+}
+
+$('#deleteButton').click(function (e) {
+  deleteButtonPressed = true;
+  console.log("Pressed Del");
+});
+
+$('#submitButton').click(function (e) {
+  deleteButtonPressed = false;
+  console.log("Pressed Sub");
+});
+
 $('#form').submit(function (e) {
   e.preventDefault();
 
-  submisionAction();
+  console.log("Delete State " + deleteButtonPressed);
+
+  if(deleteButtonPressed)
+  {
+    deleteAction();
+  }
+  else{
+    submisionAction();
+  }
 
   //$("#badData").innerHTML = "";
 });
+
+
 
   document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
