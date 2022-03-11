@@ -3,6 +3,9 @@ var bodyDataArray = [];
 var correctedDataFields = [];
 var rawFileVerificationHeaderArray = ["time","lasttime","lat","lng","speed","course","altitude","comment"];
 
+var finalHeaderDataArray = ["time","lasttime","lat","lng","speed","course","altitude","Temperature (Celsius)","Pressure (Pa)"];
+var finalBodyDataArray = [];
+
 var erroredIndexesAndPosition = [];
 var erroredIndexLastPosition = -1;
 var deleteIndexArray = [];
@@ -11,6 +14,26 @@ var deleteButtonPressed = false;
 
 window.onload = function ()
 {
+  const str = "StrTrk 35 9 1.63V 27C 97893Pa";
+    /* Regex Broken Down:
+  /StrTrk\s : Identifier
+  (([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})) : Packet # Max of 4 digits
+  \s[0-9] : Radio Score
+  \s[0-9]\.(([0-9]{2})|([0-9]{1}))V : Voltage One digit . up to two digits V
+  \s-?(([0-9]{2})|([0-9]{1}))C  : Temperature Possible negative up to two digits C
+  \s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i   : Pressure up to 6 digits Pa
+  */  
+ var temp = str.match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+ var press = str.match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
+
+// 👇️ ['apple', ' ', 'banana', ' ', 'kiwi']
+console.log(temp[0]);
+console.log(press[0]);
+
+var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
+var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
+console.log(tempNum[0]);
+console.log(pressNum[0]);
     //console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
 };
 
@@ -82,6 +105,9 @@ function readDataFile(e) {
               // Change the fieldStateBinaryString to reflect the fields that need to be turned on
               document.getElementById("deleteButton").disabled = false;
             }
+            else{
+              parseData();
+            }
 
             console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
 
@@ -106,6 +132,36 @@ function readDataFile(e) {
         
       };
       reader.readAsText(file);
+}
+
+function parseData()
+{
+  for(let i = 0; i < 9; i++)                         //Creating each array column of the multidimensional Array
+  {
+    finalBodyDataArray.push([]);
+  }
+  //console.log(dataArray);
+  
+  for(let j = 1; j < bodyDataArray.length - 1; j++)            //First loop is looping through the file line by line Note: loop starts at one to leave off the header title that is stored in position 0 of the subarray
+  {
+    
+    if(erroredIndexesAndPosition.length != 0)
+    {
+
+    }
+    else{
+      for(let k = 0; k < headerSize; k++)                       //Looping through each line item, item by item
+      {
+        //var parseLine = fileContentArray[j].split(',');
+
+        finalBodyDataArray[k].push(parseLine[k]);
+      }
+    }
+
+
+  }
+console.log(finalBodyDataArray);
+
 }
 
 function nextErroredIndexLastPosition()
