@@ -1,11 +1,10 @@
 var headerDataArray = [];
 var bodyDataArray = [];
+var correctedDataFields = [];
 var rawFileVerificationHeaderArray = ["time","lasttime","lat","lng","speed","course","altitude","comment"];
 
 var erroredIndexesAndPosition = [];
-//Index 0 = Time, Index 1 = LastTime, Index 2 = Latitude, Index 3 = Longitude, Index 4 = Speed, Index 5  = Course, Index 6 = Altitude , Index 7 = Temperature, Index 8 = Pressure
-// 0 = Hidden, 1 = Shown
-var fieldStateBinaryString = [0,0,0,0,0,0,0,0,0];
+var erroredIndexLastPosition = -1;
 
 window.onload = function ()
 {
@@ -47,7 +46,7 @@ function readDataFile(e) {
 
             //verify header
             var notWorkIndex = [];
-            notWorkIndex = verifyData(bodyArray);
+            notWorkIndex = verifyData(bodyDataArray);
             /*for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
             {
               if(commentRegex(bodyArray[7][j]) == false)
@@ -62,12 +61,14 @@ function readDataFile(e) {
 
             if(notWorkIndex.length != 0)
             {
-              erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
+              erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyDataArray);
               console.log(erroredIndexesAndPosition);
+              console.log(erroredIndexesAndPosition[1][0]);
               console.log(erroredIndexesAndPosition[0][0].length);
-              var firstBadIndex = erroredIndexesAndPosition[0][0][0];
+              nextErroredIndexLastPosition();
+              var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
               console.log(firstBadIndex);
-              $( ".badData" ).append( "<p>"+bodyArray[0][firstBadIndex]+" "+bodyArray[1][firstBadIndex]+" "+bodyArray[2][firstBadIndex]+" "+bodyArray[3][firstBadIndex]+" "+bodyArray[4][firstBadIndex]+" "+bodyArray[5][firstBadIndex]+" "+bodyArray[6][firstBadIndex]+" "+bodyArray[7][firstBadIndex]+"</p>" );
+              $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
               toggleDataCorrectionFields (erroredIndexesAndPosition[0][0]);
              /* $( ".badData" ).append( "<p> Bad Data </p>" );
               for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
@@ -104,7 +105,16 @@ function readDataFile(e) {
       reader.readAsText(file);
 }
 
-
+function nextErroredIndexLastPosition()
+{
+  if(erroredIndexLastPosition < erroredIndexesAndPosition[0][0].length)
+  {
+    erroredIndexLastPosition++;
+  }
+  else{
+    erroredIndexLastPosition = -1;
+  }
+}
 
 function toggleDataCorrectionFields (DataIndex)
 {
@@ -421,17 +431,172 @@ inputs.forEach((input) => {
 function validate(field, regex) {
   if (regex.test(field.value)) {
     field.className = 'form-control valid';
-    document.getElementById("submitButton").disabled = false;
+    
+    if(formComplete())
+    {
+      document.getElementById("submitButton").disabled = false;
+    }
+
+    
   } else {
     field.className = 'form-control invalid';
     document.getElementById("submitButton").disabled = true;
   }
 }
 
+function formComplete()
+{
+  var allowSubmission = true;
+  const formCon = 'form-control valid';
+  
+  if(document.getElementsByClassName("form-groupTime")[0].hidden == false)
+  {
+    if(document.getElementById('timeInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupLastTime")[0].hidden == false)
+  {
+    if(document.getElementById('lastTimeInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupLat")[0].hidden == false)
+  {
+    if(document.getElementById('latInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupLng")[0].hidden == false)
+  {
+    if(document.getElementById('lngInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupSpeed")[0].hidden == false)
+  {
+    if(document.getElementById('speedInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupCourse")[0].hidden == false)
+  {
+    if(document.getElementById('courseInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupAltitude")[0].hidden == false)
+  {
+    if(document.getElementById('altitudeInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupTemperature")[0].hidden == false)
+  {
+    if(document.getElementById('temperatureInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+  if(document.getElementsByClassName("form-groupPressure")[0].hidden == false)
+  {
+    if(document.getElementById('pressureInput').className.normalize() === formCon.normalize())
+    {
+
+    }
+    else{
+      allowSubmission = false;
+    }
+  }
+
+  return allowSubmission;
+
+}
+
+function submisionAction()
+{
+//correctedDataFields
+
+  nextErroredIndexLastPosition();
+
+  if(erroredIndexLastPosition != -1)
+  {
+    var correctedArray = [];
+    console.log(erroredIndexLastPosition);
+
+    var currentIndex = erroredIndexesAndPosition[0][0][erroredIndexLastPosition];
+    correctedArray.push(currentIndex);
+
+    correctedArray.push(document.getElementById('timeInput').value);
+    correctedArray.push(document.getElementById('lastTimeInput').value);
+    correctedArray.push(document.getElementById('latInput').value);
+    correctedArray.push(document.getElementById('lngInput').value);
+    correctedArray.push(document.getElementById('speedInput').value);
+    correctedArray.push(document.getElementById('courseInput').value);
+    correctedArray.push(document.getElementById('altitudeInput').value);
+    correctedArray.push(document.getElementById('temperatureInput').value);
+    correctedArray.push(document.getElementById('pressureInput').value);
+
+
+    correctedDataFields.push(correctedArray);
+
+    //erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
+    //console.log(erroredIndexesAndPosition);
+    //console.log(erroredIndexesAndPosition[0][0].length);
+    //nextErroredIndexLastPosition();
+
+    //clearing form and setting up for next input
+    hideAllInputFields ();
+    document.getElementById('badData').innerHTML = "";
+
+    var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
+    console.log(firstBadIndex);
+    $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+    toggleDataCorrectionFields (erroredIndexesAndPosition[erroredIndexLastPosition][0]);
+    console.log(correctedDataFields);
+  }
+  else{
+    console.log(correctedDataFields);
+  }
+
+}
+
 $('#form').submit(function (e) {
   e.preventDefault();
-  hideAllInputFields ();
-  document.getElementById('badData').innerHTML = "";
+
+  submisionAction();
+
   //$("#badData").innerHTML = "";
 });
 
