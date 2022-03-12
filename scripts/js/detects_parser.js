@@ -1,6 +1,6 @@
 var headerDataArray = [];
 var bodyDataArray = [];
-var correctedDataFields = [];
+
 var rawFileVerificationHeaderArray = ["time","lasttime","lat","lng","speed","course","altitude","comment"];
 
 var finalHeaderDataArray = ["time","lasttime","lat","lng","speed","course","altitude","Temperature (Celsius)","Pressure (Pa)"];
@@ -8,6 +8,8 @@ var finalBodyDataArray = [];
 
 var erroredIndexesAndPosition = [];
 var erroredIndexLastPosition = -1;
+
+var correctedDataFields = [];
 var deleteIndexArray = [];
 
 var deleteButtonPressed = false;
@@ -89,11 +91,12 @@ function readDataFile(e) {
             {
               erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyDataArray);
               console.log(erroredIndexesAndPosition);
-              console.log(erroredIndexesAndPosition[0][0]);
+              //console.log(erroredIndexesAndPosition[1][0]);
               console.log(erroredIndexesAndPosition.length);
               nextErroredIndexLastPosition();
               var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
               console.log(firstBadIndex);
+              //console.log(erroredIndexesAndPosition[1][0][2]);
               $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
               toggleDataCorrectionFields (erroredIndexesAndPosition[0][0]);
              /* $( ".badData" ).append( "<p> Bad Data </p>" );
@@ -141,13 +144,232 @@ function parseData()
     finalBodyDataArray.push([]);
   }
   //console.log(dataArray);
-  
-  for(let j = 0; j < bodyDataArray[0].length; j++)            //First loop is looping through the file line by line Note: loop starts at one to leave off the header title that is stored in position 0 of the subarray
+  var badDataLineArry = [];
+  var repairLineArry = [];
+  var deleteLineArry = [];
+
+  for(let j = 0; j < bodyDataArray[0].length; j++)
   {
     
     if(erroredIndexesAndPosition.length != 0)
     {
+      /*console.log(erroredIndexesAndPosition[0][0]);
+      console.log(erroredIndexesAndPosition.length);
+      nextErroredIndexLastPosition();
+      var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
+      
+      var correctedDataFields = [];
+var deleteIndexArray = [];
 
+      */
+      var badDataLine = false;
+      var repairLine = false;
+      var deleteLine = false;
+      var correctionIndex = -1;
+      var badDataLineIndex = -1;
+      for(let b = 0; b < erroredIndexesAndPosition.length; b++)            
+      {
+        if(j == erroredIndexesAndPosition[b][0][0])
+        {
+          badDataLine = true;
+          badDataLineIndex = b;
+        }
+      }
+      if(badDataLine == true)
+      {
+        //console.log(correctedDataFields.length);
+        for(let r = 0; r < correctedDataFields.length; r++)            
+        {
+          //console.log(correctedDataFields[r][0]);
+          if(j == correctedDataFields[r][0])
+          {
+            repairLine = true;
+            correctionIndex = r;
+          }
+        }
+        for(let d = 0; d < correctedDataFields.length; d++)
+        {
+          //console.log(correctedDataFields[r][0]);
+          if(j == deleteIndexArray[d])
+          {
+            deleteLine = true;
+          }
+        }
+      }
+
+
+      badDataLineArry.push(badDataLine);
+      repairLineArry.push(repairLine);
+      deleteLineArry.push(deleteLine);
+
+      if(badDataLine == false)  // No change to Line
+      {
+        //var parseLine = fileContentArray[j].split(',');
+        var parsedRowArray = [];
+        parsedRowArray.push(bodyDataArray[0][j]);
+        parsedRowArray.push(bodyDataArray[1][j]);
+        parsedRowArray.push(bodyDataArray[2][j]);
+        parsedRowArray.push(bodyDataArray[3][j]);
+        parsedRowArray.push(bodyDataArray[4][j]);
+        parsedRowArray.push(bodyDataArray[5][j]);
+        parsedRowArray.push(bodyDataArray[6][j]);
+        var temp = bodyDataArray[7][j].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+        var press = bodyDataArray[7][j].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
+        
+        var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
+        var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
+
+        parsedRowArray.push(tempNum[0]);
+        parsedRowArray.push(pressNum[0]);
+
+        for(let k = 0; k < 9; k++)                       //Looping through each line item, item by item
+        {
+          finalBodyDataArray[k].push(parsedRowArray[k]);
+        }
+      }
+      else if(repairLine == false && deleteLine == true)  //Delete Line
+      {
+        //Do Nothing
+      }
+      else if(repairLine == true && deleteLine == false) //Repair Line
+      {
+        var parsedRowArray = [];
+
+        var pos0 = false;
+        var pos1 = false;
+        var pos2 = false;
+        var pos3 = false;
+        var pos4 = false;
+        var pos5 = false;
+        var pos6 = false;
+        var pos7 = false;
+
+
+        for( let index = 1; index < erroredIndexesAndPosition[badDataLineIndex][0].length; index++)
+        {
+          console.log(erroredIndexesAndPosition[badDataLineIndex][0][index]);
+          switch(erroredIndexesAndPosition[badDataLineIndex][0][index]) {
+            case 0:
+              pos0 = true;
+              console.log("Set 0");
+              break;
+            case 1:
+              pos1 = true;
+              console.log("Set 1");
+              break;
+            case 2:
+              pos2 = true;
+              console.log("Set 2");
+              break;
+            case 3:
+              pos3 = true;
+              console.log("Set 3");
+              break;
+            case 4:
+              pos4 = true;
+              console.log("Set 4");
+              break;
+            case 5:
+              pos5 = true;
+              console.log("Set 5");
+              break;
+            case 6:
+              pos6 = true;
+              console.log("Set 6");
+              break;
+            case 7:
+              pos7 = true;
+              console.log("Set 7");
+              break;
+            default:
+              // code block
+          }
+        }
+
+        console.log("POS 7 " + pos7 );
+
+        if(pos0 == false)
+        {
+          parsedRowArray.push(bodyDataArray[0][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][1]);
+        }
+
+        if(pos1 == false)
+        {
+          parsedRowArray.push(bodyDataArray[1][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][2]);
+        }
+        
+        if(pos2 == false)
+        {
+          parsedRowArray.push(bodyDataArray[2][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][3]);
+        }
+        
+        if(pos3 == false)
+        {
+          parsedRowArray.push(bodyDataArray[3][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][4]);
+        }
+        
+        if(pos4 == false)
+        {
+          parsedRowArray.push(bodyDataArray[4][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][5]);
+        }
+        
+        if(pos5 == false)
+        {
+          parsedRowArray.push(bodyDataArray[5][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][6]);
+        }
+        
+        if(pos6 == false)
+        {
+          parsedRowArray.push(bodyDataArray[6][j]);
+        }
+        else{
+          parsedRowArray.push(correctedDataFields[correctionIndex][7]);
+        }
+        
+        if(pos7 == false)
+        {
+          var temp = bodyDataArray[7][j].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+          var press = bodyDataArray[7][j].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
+          
+          var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
+          var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
+  
+          parsedRowArray.push(tempNum[0]);
+          parsedRowArray.push(pressNum[0]);
+        }else{
+          var temp = correctedDataFields[correctionIndex][8].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+          var press = correctedDataFields[correctionIndex][9].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
+          
+          var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
+          var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
+  
+          parsedRowArray.push(tempNum[0]);
+          parsedRowArray.push(pressNum[0]);
+        }
+
+        for(let k = 0; k < 9; k++)                       //Looping through each line item, item by item
+        {
+          finalBodyDataArray[k].push(parsedRowArray[k]);
+        }
+      }
     }
     else{
       //var parseLine = fileContentArray[j].split(',');
@@ -176,6 +398,9 @@ function parseData()
 
 
   }
+  //console.log(badDataLineArry);
+   // console.log(repairLineArry);
+  //  console.log(deleteLineArry);
   exportToCSV();
 console.log(finalBodyDataArray);
 
@@ -211,7 +436,7 @@ function exportToCSV()
     var encodedUri = encodeURI(csvContent);
     var link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "balloonData.csv");
+    link.setAttribute("download", "cleanedData.csv");
     document.body.appendChild(link); // Required for FF
     
     link.click(); 
@@ -714,6 +939,7 @@ function submisionAction()
     console.log(correctedDataFields);
     console.log("Deleted");
     console.log(deleteIndexArray);
+    parseData();
   }
 
 }
@@ -759,6 +985,7 @@ function deleteAction()
     console.log( correctedDataFields);
     console.log("Deleted");
     console.log(deleteIndexArray);
+    parseData();
   }
 
 }
