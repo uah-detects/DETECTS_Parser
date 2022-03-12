@@ -142,7 +142,7 @@ function parseData()
   }
   //console.log(dataArray);
   
-  for(let j = 1; j < bodyDataArray.length - 1; j++)            //First loop is looping through the file line by line Note: loop starts at one to leave off the header title that is stored in position 0 of the subarray
+  for(let j = 0; j < bodyDataArray[0].length; j++)            //First loop is looping through the file line by line Note: loop starts at one to leave off the header title that is stored in position 0 of the subarray
   {
     
     if(erroredIndexesAndPosition.length != 0)
@@ -150,18 +150,71 @@ function parseData()
 
     }
     else{
-      for(let k = 0; k < headerSize; k++)                       //Looping through each line item, item by item
-      {
-        //var parseLine = fileContentArray[j].split(',');
+      //var parseLine = fileContentArray[j].split(',');
+      var parsedRowArray = [];
+      parsedRowArray.push(bodyDataArray[0][j]);
+      parsedRowArray.push(bodyDataArray[1][j]);
+      parsedRowArray.push(bodyDataArray[2][j]);
+      parsedRowArray.push(bodyDataArray[3][j]);
+      parsedRowArray.push(bodyDataArray[4][j]);
+      parsedRowArray.push(bodyDataArray[5][j]);
+      parsedRowArray.push(bodyDataArray[6][j]);
+      var temp = bodyDataArray[7][j].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+      var press = bodyDataArray[7][j].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
+      
+      var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
+      var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
 
-        finalBodyDataArray[k].push(parseLine[k]);
+      parsedRowArray.push(tempNum[0]);
+      parsedRowArray.push(pressNum[0]);
+
+      for(let k = 0; k < 9; k++)                       //Looping through each line item, item by item
+      {
+        finalBodyDataArray[k].push(parsedRowArray[k]);
       }
     }
 
 
   }
+  exportToCSV();
 console.log(finalBodyDataArray);
 
+}
+
+function exportCleanedArray()
+{
+  var exporterArray = [];
+  exporterArray.push(finalHeaderDataArray);
+  // i delimits row, j delimits column
+  for(let i = 0; i < finalBodyDataArray[0].length; i++)
+  {
+    var row = [];
+    for(let j=0; j < finalBodyDataArray.length;j++)
+    {
+      row[j] = finalBodyDataArray[j][i];
+    }
+    exporterArray.push(row);
+  }
+  return exporterArray;
+}
+
+function exportToCSV()
+{
+  console.log("In Funcction CSV");
+  var exportedArray = exportCleanedArray();
+  console.log("New Array");
+  console.log(exportedArray);
+
+  let csvContent = "data:text/csv;charset=utf-8," 
+    + exportedArray.map(e => e.join(",")).join("\n");
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "balloonData.csv");
+    document.body.appendChild(link); // Required for FF
+    
+    link.click(); 
 }
 
 function nextErroredIndexLastPosition()
