@@ -89,6 +89,7 @@ function readDataFile(e) {
 
             if(notWorkIndex.length != 0)
             {
+              unhideForm ();
               erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyDataArray);
               console.log(erroredIndexesAndPosition);
               //console.log(erroredIndexesAndPosition[1][0]);
@@ -402,6 +403,7 @@ var deleteIndexArray = [];
    // console.log(repairLineArry);
   //  console.log(deleteLineArry);
   exportToCSV();
+  hideForm ();
 console.log(finalBodyDataArray);
 
 }
@@ -569,6 +571,18 @@ function hideAllInputFields ()
 
   //document.getElementById("submitButton").disabled=true;
   //document.getElementById("submitButton").hidden=true;
+}
+
+function unhideForm ()
+{
+  document.getElementsByClassName("container")[0].disabled = false;
+  document.getElementsByClassName("container")[0].hidden = false;
+}
+
+function hideForm ()
+{
+  document.getElementsByClassName("container")[0].disabled = true;
+  document.getElementsByClassName("container")[0].hidden = true;
 }
 
 function verifyData(input)
@@ -752,8 +766,8 @@ const inputs = document.querySelectorAll('input');
 const patterns = {
   timeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2}):([0-9]{2})$/i,
   lastTimeInput: /^([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2}):([0-9]{2})$/i,
-  latInput: /^(-?([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
-  lngInput: /^(-?([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
+  latInput: /^-?(([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
+  lngInput: /^-?(([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,
   speedInput: /^-?(([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))$/i,
   courseInput: /^-?(([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))$/i,
   altitudeInput: /^(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))(\.(([0-9]{3})|([0-9]{2})|([0-9]{1})))?$/i,

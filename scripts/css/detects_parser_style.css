@@ -40,7 +40,8 @@ label {
   text-align: right;
   display: block;
   letter-spacing: 2px;
-  color: #adb5bd;
+  color: #f80303;
+  font-weight: bold;
   text-transform: uppercase;
 }
 
