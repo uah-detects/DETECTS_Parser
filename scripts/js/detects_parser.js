@@ -14,38 +14,6 @@ var deleteIndexArray = [];
 
 var deleteButtonPressed = false;
 
-//      var temp = bodyDataArray[7][j].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
-/*
-      const dateTime = Date.parse(document.getElementById('timeInput').value);
-      console.log(dateTime);
-      console.log(document.getElementById('timeInput').value);
-
-
-      if(isNaN(dateTime)){
-        allowSubmission = false;
-        var time = document.getElementById('timeInput');
-        time.className = 'form-control invalid';
-      
-        //var lastTime = document.getElementById('lastTimeInput');
-        //lastTime.className = 'form-control';
-
-      }
-*/
- /*
-  let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
-  let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
-*/
-
-
-window.onload = function ()
-{
- /*
-  let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
-  let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
-*/
-  var str = "02/29/2022 23:15:00";
-  console.log(isValidDate(str));
-};
 function readDataFile(e) {
 
     var file = e.target.files[0];
@@ -109,22 +77,6 @@ function readDataFile(e) {
 
             console.log(commentRegex(" StrTrk 35 9 1.63V 27C 97893Pa "));
 
-
-            ////////////////////////////////////////////////Splitting comment//////////////////////////
-            /* Regex Broken Down:
-            /StrTrk\s : Identifier
-            (([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})) : Packet # Max of 4 digits
-            \s[0-9] : Radio Score
-            \s[0-9]\.(([0-9]{2})|([0-9]{1}))V : Voltage One digit . up to two digits V
-            \s-?(([0-9]{2})|([0-9]{1}))C  : Temperature Possible negative up to two digits C
-            \s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i   : Pressure up to 6 digits Pa
-            */                 
-            /*let regexSub = /StrTrk\s(([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))\s[0-9]\s[0-9]\.(([0-9]{2})|([0-9]{1}))V\s-?(([0-9]{2})|([0-9]{1}))C\s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i;
-            var commentSplit = regexSub.exec(bodyArray[7][1]);
-            var commentSplitArr = commentSplit[0].split(/[ ,]+/);
-            console.log(commentSplitArr);*/
-            ////////////////////////////////////////////////Splitting comment//////////////////////////
-
         }
 
         
@@ -163,10 +115,8 @@ function parseData()
       }
       if(badDataLine == true)
       {
-        //console.log(correctedDataFields.length);
         for(let r = 0; r < correctedDataFields.length; r++)            
         {
-          //console.log(correctedDataFields[r][0]);
           if(j == correctedDataFields[r][0])
           {
             repairLine = true;
@@ -175,7 +125,6 @@ function parseData()
         }
         for(let d = 0; d < correctedDataFields.length; d++)
         {
-          //console.log(correctedDataFields[r][0]);
           if(j == deleteIndexArray[d])
           {
             deleteLine = true;
@@ -965,13 +914,6 @@ function submisionAction()
 
   if(erroredIndexLastPosition != -1)
   {
-
-
-    //erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
-    //console.log(erroredIndexesAndPosition);
-    //console.log(erroredIndexesAndPosition[0][0].length);
-    //nextErroredIndexLastPosition();
-
     //clearing form and setting up for next input
     hideAllInputFields ();
     document.getElementById('badData').innerHTML = "";
@@ -1000,7 +942,6 @@ function submisionAction()
 
 function deleteAction()
 {
-
   //deleteIndexArray
   var lastPos = erroredIndexLastPosition;
   nextErroredIndexLastPosition();
@@ -1011,13 +952,6 @@ function deleteAction()
 
   if(erroredIndexLastPosition != -1)
   {
-
-
-    //erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyArray);
-    //console.log(erroredIndexesAndPosition);
-    //console.log(erroredIndexesAndPosition[0][0].length);
-    //nextErroredIndexLastPosition();
-
     //clearing form and setting up for next input
     hideAllInputFields ();
     document.getElementById('badData').innerHTML = "";
@@ -1067,9 +1001,6 @@ $('#form').submit(function (e) {
     submisionAction();
   }
 
-  //$("#badData").innerHTML = "";
 });
 
-
-
-  document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
+document.getElementById('fileinput').addEventListener('change', readDataFile, false);  // Listener for the Data File input
