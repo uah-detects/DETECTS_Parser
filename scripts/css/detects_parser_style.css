@@ -40,7 +40,17 @@ label {
   text-align: right;
   display: block;
   letter-spacing: 2px;
-  color: #f80303;
+  color: #000000;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.fileInputLabel {
+  margin-bottom: 0.5rem;
+  text-align: right;
+  display: block;
+  letter-spacing: 2px;
+  color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -96,4 +106,8 @@ label {
   color: white;
   background: black;
   transition: all 0.4s ease-out;
+}
+
+.jc-center {
+  justify-content: center;
 }

@@ -16,13 +16,14 @@
   <div class="d-flex justify-content-center">
     <div class="d-flex flex-column">
       <div>
-      <label for="fileinput">Input the File to be cleaned:</label>
+        <label class="fileInputLabel" for="fileinput">Input the File to be cleaned:</label>
       </div>
       <div>
-      <input type="file" id="fileinput">
-      <pre id="file-content"></pre>
+        <input class="form-control form-control-lg" id="fileinput" type="file" id=>
+        
+        <pre  id="file-content"></pre>
       </div>
-  </div>
+    </div>
   </div>
 </div>
 
@@ -89,9 +90,18 @@
             <small id="pressureHelp" style="color:black;" class="form-text">Pressure must be up to a 6 digit number followed by a Pa</small>
             </div>
 
+            <div class="container_Buttons">
+              <div class="text-center">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button  class="btn d-block mx-auto" id="submitButton" value="Submit" disabled hidden>Submit Row</button>
+                </div>
 
-            <button  class="btn d-block mx-auto" id="submitButton" value="Submit" disabled hidden>Submit Row</button>
-            <button  class="btn d-block mx-auto" id="deleteButton" value= "Delete" disabled hidden>Delete Row</button>
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                  <button  class="btn d-block mx-auto" id="deleteButton" value= "Delete" disabled hidden>Delete Row</button>
+                </div>
+              </div>
+            </div>
+
         </form>
       </div>
     </div>
