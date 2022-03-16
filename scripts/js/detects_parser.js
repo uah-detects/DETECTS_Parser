@@ -97,7 +97,9 @@ function parseData()
 
   for(let j = 0; j < bodyDataArray[0].length; j++)
   {
-    
+
+    console.log(finalBodyDataArray);
+    ////////////////////////////////////////////////////////////////////
     if(erroredIndexesAndPosition.length != 0)
     {
       var badDataLine = false;
@@ -305,6 +307,8 @@ function parseData()
         }
       }
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////
     else{
 
       var parsedRowArray = [];
@@ -344,6 +348,8 @@ function exportCleanedArray()
   var exporterArray = [];
   exporterArray.push(finalHeaderDataArray);
   // i delimits row, j delimits column
+  console.log(finalBodyDataArray[0].length);
+  console.log(finalBodyDataArray.length);
   for(let i = 0; i < finalBodyDataArray[0].length; i++)
   {
     var row = [];
