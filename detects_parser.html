@@ -11,9 +11,103 @@
 </head>
 <html>
 <body>
-<input type="file" id="fileinput">
-<pre id="file-content"></pre>
-<button id="btnExport" type="button" text="Export" > Export to Images </button>
+
+<div class="container1 col-12 col-md-8 mx-md-auto mt-5 w-100 ">
+  <div class="d-flex justify-content-center">
+    <div class="d-flex flex-column">
+      <div>
+        <label class="fileInputLabel" for="fileinput">Input the File to be cleaned:</label>
+      </div>
+      <div>
+        <input class="form-control form-control-lg" id="fileinput" type="file" id=>
+        
+        <pre  id="file-content"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" disabled hidden>
+    <div class="row">
+      <div class="col-12 col-md-8 mx-md-auto mt-5">
+        <form id= "form" class="px-2 px-sm-5 py-5">
+            
+
+
+            <div class="badData" id="badData">
+            </div>
+            <div class="form-groupTime" disabled hidden>
+            <label for="timeInput">Time</label>
+            <input type="text" class="form-control" id="timeInput" placeholder="Enter the correct time in the form YYYY-MM-DD HH:MM:SS">
+            <small id="timeHelp" style="color:black;" class="form-text">Time must be in the form YYYY-MM-DD HH:MM:SS</small>
+            </div>
+
+            <div class="form-groupLastTime"disabled hidden>
+            <label for="lastTimeInput">Last Time</label>
+            <input type="text" class="form-control" id="lastTimeInput" placeholder="Enter the correct Last Time in the form YYYY-MM-DD HH:MM:SS">
+            <small id="lastTimeHelp" style="color:black;" class="form-text">Last Time must be in the form YYYY-MM-DD HH:MM:SS.</small>
+            </div>
+
+            <div class="form-groupLat"disabled hidden>
+            <label for="latInput">Latitude</label>
+            <input type="text" class="form-control" id="latInput" placeholder="Enter the correct positive or negative three digit or smaller number up to 5 decimal places">
+            <small id="latHelp" style="color:black;" class="form-text">Latitude must be a positive or negative three digit or smaller number up to 5 decimal places</small>
+            </div>
+
+            <div class="form-groupLng"disabled hidden>
+            <label for="lngInput">Longitude</label>
+            <input type="text" class="form-control" id="lngInput" placeholder="Enter the correct positive or negative three digit  or smaller number up to 5 decimal places">
+            <small id="lngHelp" style="color:black;" class="form-text">Longitude must be a positive or negative three digit or smaller number up to 5 decimal places</small>
+            </div>
+
+            <div class="form-groupSpeed"disabled hidden>
+            <label for="speedInput">Speed</label>
+            <input type="text" class="form-control" id="speedInput" placeholder="Enter a correct positive or negative number up to four digits">
+            <small id="speedHelp" style="color:black;" class="form-text">Speed must be a positive or negative up to four digits</small>
+            </div>
+
+            <div class="form-groupCourse"disabled hidden>
+            <label for="courseInput">Course</label>
+            <input type="text" class="form-control" id="courseInput" placeholder="Enter a correct positive or negative number up to four digits">
+            <small id="courseHelp" style="color:black;" class="form-text">Course must be a positive or negative up to four digits</small>
+            </div>
+
+            <div class="form-groupAltitude"disabled hidden>
+            <label for="altitudeInput">Altitude</label>
+            <input type="text" class="form-control" id="altitudeInput" placeholder="Enter a correct positive number up to 6 digits and 3 decimal places">
+            <small id="altitudeHelp" style="color:black;" class="form-text">Altitude must be a correct positive number up to 6 digits and 3 decimal places</small>
+            </div>
+
+            <div class="form-groupTemperature"disabled hidden>
+            <label for="temperatureInput">Temperature</label>
+            <input type="text" class="form-control" id="temperatureInput" placeholder="Enter up to a 2 digit number followed by a Capital C">
+            <small id="temperatureHelp" style="color:black;" class="form-text">Temperature must be up to a 2 digit number followed by a Capital C </small>
+            </div>
+
+            <div class="form-groupPressure"disabled hidden>
+            <label for="pressureInput">Pressure</label>
+            <input type="text" class="form-control" id="pressureInput" placeholder="Enter up to a 6 digit number followed by a Pa">
+            <small id="pressureHelp" style="color:black;" class="form-text">Pressure must be up to a 6 digit number followed by a Pa</small>
+            </div>
+
+            <div class="container_Buttons">
+              <div class="text-center">
+                <div class="btn-group mr-2" role="group" aria-label="First group">
+                  <button  class="btn d-block mx-auto" id="submitButton" value="Submit" disabled hidden>Submit Row</button>
+                </div>
+
+                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                  <button  class="btn d-block mx-auto" id="deleteButton" value= "Delete" disabled hidden>Delete Row</button>
+                </div>
+              </div>
+            </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
 </body>
 <script src="scripts/js/detects_parser.js"></script>
 </html>
