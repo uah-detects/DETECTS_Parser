@@ -14,31 +14,38 @@ var deleteIndexArray = [];
 
 var deleteButtonPressed = false;
 
+//      var temp = bodyDataArray[7][j].match(/-?(([0-9]{2})|([0-9]{1}))C/i);
+/*
+      const dateTime = Date.parse(document.getElementById('timeInput').value);
+      console.log(dateTime);
+      console.log(document.getElementById('timeInput').value);
+
+
+      if(isNaN(dateTime)){
+        allowSubmission = false;
+        var time = document.getElementById('timeInput');
+        time.className = 'form-control invalid';
+      
+        //var lastTime = document.getElementById('lastTimeInput');
+        //lastTime.className = 'form-control';
+
+      }
+*/
+ /*
+  let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
+  let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
+*/
+
+
 window.onload = function ()
 {
-  const str = "StrTrk 35 9 1.63V 27C 97893Pa";
-    /* Regex Broken Down:
-  /StrTrk\s : Identifier
-  (([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1})) : Packet # Max of 4 digits
-  \s[0-9] : Radio Score
-  \s[0-9]\.(([0-9]{2})|([0-9]{1}))V : Voltage One digit . up to two digits V
-  \s-?(([0-9]{2})|([0-9]{1}))C  : Temperature Possible negative up to two digits C
-  \s(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i   : Pressure up to 6 digits Pa
-  */  
- var temp = str.match(/-?(([0-9]{2})|([0-9]{1}))C/i);
- var press = str.match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))Pa/i);
-
-// 👇️ ['apple', ' ', 'banana', ' ', 'kiwi']
-console.log(temp[0]);
-console.log(press[0]);
-
-var tempNum = temp[0].match(/-?(([0-9]{2})|([0-9]{1}))/i);
-var pressNum = press[0].match(/(([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})|([0-9]{2})|([0-9]{1}))/i);
-console.log(tempNum[0]);
-console.log(pressNum[0]);
-    //console.log(commentRegex("StrTrk 35 9 1.63V 27C 97893Pa"));
+ /*
+  let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
+  let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
+*/
+  var str = "02/29/2022 23:15:00";
+  console.log(isValidDate(str));
 };
-
 function readDataFile(e) {
 
     var file = e.target.files[0];
@@ -75,13 +82,7 @@ function readDataFile(e) {
             //verify header
             var notWorkIndex = [];
             notWorkIndex = verifyData(bodyDataArray);
-            /*for(let j = 0; j < bodyArray[0].length; j++)            //First loop is looping through the file line by line
-            {
-              if(commentRegex(bodyArray[7][j]) == false)
-              {
-                notWorkIndex.push(j);
-              }
-            }*/
+ 
             console.log(notWorkIndex.length);
             console.log(notWorkIndex);
 
@@ -91,20 +92,13 @@ function readDataFile(e) {
             {
               unhideForm ();
               erroredIndexesAndPosition = identifyBadDataSection(notWorkIndex,bodyDataArray);
-              console.log(erroredIndexesAndPosition);
-              //console.log(erroredIndexesAndPosition[1][0]);
-              console.log(erroredIndexesAndPosition.length);
+
               nextErroredIndexLastPosition();
+
               var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
-              console.log(firstBadIndex);
-              //console.log(erroredIndexesAndPosition[1][0][2]);
+
               $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
               toggleDataCorrectionFields (erroredIndexesAndPosition[0][0]);
-             /* $( ".badData" ).append( "<p> Bad Data </p>" );
-              for(let j = 0; j < notWorkIndex.length; j++)            //First loop is looping through the file line by line
-              {
-                $( ".badData" ).append( "<p>"+bodyArray[0][notWorkIndex[j]]+" "+bodyArray[1][notWorkIndex[j]]+" "+bodyArray[2][notWorkIndex[j]]+" "+bodyArray[3][notWorkIndex[j]]+" "+bodyArray[4][notWorkIndex[j]]+" "+bodyArray[5][notWorkIndex[j]]+" "+bodyArray[6][notWorkIndex[j]]+" "+bodyArray[7][notWorkIndex[j]]+"</p>" );
-              }*/
 
               // Change the fieldStateBinaryString to reflect the fields that need to be turned on
               document.getElementById("deleteButton").disabled = false;
@@ -144,7 +138,7 @@ function parseData()
   {
     finalBodyDataArray.push([]);
   }
-  //console.log(dataArray);
+
   var badDataLineArry = [];
   var repairLineArry = [];
   var deleteLineArry = [];
@@ -154,15 +148,6 @@ function parseData()
     
     if(erroredIndexesAndPosition.length != 0)
     {
-      /*console.log(erroredIndexesAndPosition[0][0]);
-      console.log(erroredIndexesAndPosition.length);
-      nextErroredIndexLastPosition();
-      var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
-      
-      var correctedDataFields = [];
-var deleteIndexArray = [];
-
-      */
       var badDataLine = false;
       var repairLine = false;
       var deleteLine = false;
@@ -205,7 +190,7 @@ var deleteIndexArray = [];
 
       if(badDataLine == false)  // No change to Line
       {
-        //var parseLine = fileContentArray[j].split(',');
+
         var parsedRowArray = [];
         parsedRowArray.push(bodyDataArray[0][j]);
         parsedRowArray.push(bodyDataArray[1][j]);
@@ -283,7 +268,6 @@ var deleteIndexArray = [];
               console.log("Set 7");
               break;
             default:
-              // code block
           }
         }
 
@@ -373,7 +357,7 @@ var deleteIndexArray = [];
       }
     }
     else{
-      //var parseLine = fileContentArray[j].split(',');
+
       var parsedRowArray = [];
       parsedRowArray.push(bodyDataArray[0][j]);
       parsedRowArray.push(bodyDataArray[1][j]);
@@ -399,9 +383,7 @@ var deleteIndexArray = [];
 
 
   }
-  //console.log(badDataLineArry);
-   // console.log(repairLineArry);
-  //  console.log(deleteLineArry);
+
   exportToCSV();
   hideForm ();
 console.log(finalBodyDataArray);
@@ -569,8 +551,6 @@ function hideAllInputFields ()
   document.getElementsByClassName("form-groupTemperature")[0].hidden = true;
   document.getElementsByClassName("form-groupPressure")[0].hidden = true;
 
-  //document.getElementById("submitButton").disabled=true;
-  //document.getElementById("submitButton").hidden=true;
 }
 
 function unhideForm ()
@@ -591,24 +571,10 @@ function verifyData(input)
 
   for(let j = 0; j < input[0].length; j++)            //First loop is looping through the file line by line
   {
-    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
-    let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
-    //NEED TO ADD REGEX FOR DATE TO Check it is returning correct form
-    //2021-06-01\s+16:54:14
-    if(regexTimeFormOne.test(input[0][j]) == false && regexTimeFormTwo.test(input[0][j]) == false){
-      const dateTime = Date.parse(input[0][j]);
-
-      if(isNaN(dateTime)){
-        badDataLineIndex.push(j);
-      }
-
-    } else if(regexTimeFormOne.test(input[1][j]) == false && regexTimeFormTwo.test(input[1][j]) == false){
-      const dateLastTime = Date.parse(input[1][j]);
-
-      if(isNaN(dateLastTime)){
-        badDataLineIndex.push(j);
-      }
-      
+    if(isValidDate(input[0][j]) == false){
+      badDataLineIndex.push(j);
+    } else if(isValidDate(input[1][j]) == false){
+      badDataLineIndex.push(j);
     } else if(isNaN(input[2][j]) || input[2][j] === ""){
       badDataLineIndex.push(j);
     } else if(isNaN(input[3][j]) || input[3][j] === ""){
@@ -645,25 +611,12 @@ function identifyBadDataSection(badDataIndexArray,dataInputArray)
   {
     var dataColumnErrorArr = []; // Position zero contains the row index and all following positions are rows that contain an error
     dataColumnErrorArr.push(badDataIndexArray[j]);
-
-    let regexTimeFormOne = /([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i;
-    let regexTimeFormTwo = /(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i;
  
-    if(regexTimeFormOne.test(dataInputArray[0][badDataIndexArray[j]]) == false && regexTimeFormTwo.test(dataInputArray[0][badDataIndexArray[j]]) == false){
-      const dateTime = Date.parse(dataInputArray[0][badDataIndexArray[j]]);
-
-      if(isNaN(dateTime)){
+    if(isValidDate(dataInputArray[0][badDataIndexArray[j]]) == false){
         dataColumnErrorArr.push(0);
-      }
-
     }
-    if(regexTimeFormOne.test(dataInputArray[1][badDataIndexArray[j]]) == false && regexTimeFormTwo.test(dataInputArray[1][badDataIndexArray[j]]) == false){
-      const dateLastTime = Date.parse(dataInputArray[1][badDataIndexArray[j]]);
-
-      if(isNaN(dateLastTime)){
-        dataColumnErrorArr.push(1);
-      }
-      
+    if(isValidDate(dataInputArray[1][badDataIndexArray[j]]) == false){
+      dataColumnErrorArr.push(1);
     }
     if(isNaN(dataInputArray[2][badDataIndexArray[j]]) || dataInputArray[2][badDataIndexArray[j]] === ""){
       dataColumnErrorArr.push(2);
@@ -685,10 +638,6 @@ function identifyBadDataSection(badDataIndexArray,dataInputArray)
     }
 
     dataArray[j].push(dataColumnErrorArr);
-    /*for(let k = 0; k < badDataIndexArray.length - 1; k++)                       //Looping through each line item, item by item
-    {
-      
-    }*/
 
   }
   return dataArray;
@@ -797,6 +746,89 @@ function validate(field, regex) {
   }
 }
 
+// Validates that the input string is a valid date formatted as "mm/dd/yyyy"
+function isValidDate(dateString)
+{
+  //if
+  if(/(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})\s([0-9]{2}):([0-9]{2})/i.test(dateString))
+  {
+    const dateTime = Date.parse(dateString);
+    if(isNaN(dateTime)){
+      return false;
+    }
+    else{
+      var date = dateString.match(/(([0-9]{2})|([0-9]{1}))\/([0-9]{2})\/([0-9]{4})/i);
+      if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date[0]))
+      {
+        // Parse the date parts to integers
+        var parts = date[0].split("/");
+        var day = parseInt(parts[1], 10);
+        var month = parseInt(parts[0], 10);
+        var year = parseInt(parts[2], 10);
+
+        console.log(day);
+        console.log(month);
+        console.log(year);
+
+        // Check the ranges of month and year
+        if(year < 1000 || year > 3000 || month == 0 || month > 12)
+            return false;
+
+        var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+        // Adjust for leap years
+        if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+            monthLength[1] = 29;
+
+        // Check the range of the day
+        return day > 0 && day <= monthLength[month - 1];
+      }
+      else{
+        return false;
+      }
+    }
+  }
+  else if(/([0-9]{4})-([0-9]{2})-([0-9]{2})\s([0-9]{2}):([0-9]{2})/i.test(dateString))
+  {
+    const dateTime = Date.parse(dateString);
+    if(isNaN(dateTime)){
+      return false;
+    }
+    else{
+      var date = dateString.match(/([0-9]{4})-([0-9]{2})-([0-9]{2})/i);
+      if(/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/.test(date[0]))
+      {
+        // Parse the date parts to integers
+        var parts = date[0].split("-");
+        var month = parseInt(parts[1], 10);
+        var year = parseInt(parts[0], 10);
+        var day = parseInt(parts[2], 10);
+
+        console.log(day);
+        console.log(month);
+        console.log(year);
+
+        // Check the ranges of month and year
+        if(year < 1000 || year > 3000 || month == 0 || month > 12)
+            return false;
+
+        var monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+        // Adjust for leap years
+        if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+            monthLength[1] = 29;
+
+        // Check the range of the day
+        return day > 0 && day <= monthLength[month - 1];
+      }
+      else{
+        return false;
+      }
+    }
+  }
+  else{
+    return false;
+  }
+};
+
 function formComplete()
 {
   var allowSubmission = true;
@@ -806,7 +838,11 @@ function formComplete()
   {
     if(document.getElementById('timeInput').className.normalize() === formCon.normalize())
     {
-
+      if(isValidDate(document.getElementById('timeInput').value) == false){
+        allowSubmission = false;
+        var time = document.getElementById('timeInput');
+        time.className = 'form-control invalid';
+      }
     }
     else{
       allowSubmission = false;
@@ -816,7 +852,11 @@ function formComplete()
   {
     if(document.getElementById('lastTimeInput').className.normalize() === formCon.normalize())
     {
-
+      if(isValidDate(document.getElementById('lastTimeInput').value) == false){
+        allowSubmission = false;
+        var lastTime = document.getElementById('lastTimeInput');
+        lastTime.className = 'form-control invalid';
+      }
     }
     else{
       allowSubmission = false;
