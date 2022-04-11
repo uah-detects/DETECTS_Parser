@@ -65,7 +65,8 @@ function readDataFile(e) {
 
               var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
 
-              $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+              //$( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+              $( ".badData" ).append( "<p style='text-align:left'>"+"Time: "+bodyDataArray[0][firstBadIndex]+" | "+"Last Time:"+bodyDataArray[1][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Latitude: "+bodyDataArray[2][firstBadIndex]+" | "+"Longitude: " +bodyDataArray[3][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Speed: "+bodyDataArray[4][firstBadIndex]+" | "+"Course: "+bodyDataArray[5][firstBadIndex]+" | "+"Altitude: "+bodyDataArray[6][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Temperature & Pressure: "+bodyDataArray[7][firstBadIndex]+"</p>" );
               toggleDataCorrectionFields (erroredIndexesAndPosition[0][0]);
 
               // Change the fieldStateBinaryString to reflect the fields that need to be turned on
@@ -926,7 +927,7 @@ function submisionAction()
 
     var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
     console.log(firstBadIndex);
-    $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+    $( ".badData" ).append( "<p style='text-align:left'>"+"Time: "+bodyDataArray[0][firstBadIndex]+" | "+"Last Time:"+bodyDataArray[1][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Latitude: "+bodyDataArray[2][firstBadIndex]+" | "+"Longitude: " +bodyDataArray[3][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Speed: "+bodyDataArray[4][firstBadIndex]+" | "+"Course: "+bodyDataArray[5][firstBadIndex]+" | "+"Altitude: "+bodyDataArray[6][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Temperature & Pressure: "+bodyDataArray[7][firstBadIndex]+"</p>" );
     toggleDataCorrectionFields (erroredIndexesAndPosition[erroredIndexLastPosition][0]);
     console.log("Corrected");
     console.log(correctedDataFields);
@@ -964,7 +965,7 @@ function deleteAction()
 
     var firstBadIndex = erroredIndexesAndPosition[erroredIndexLastPosition][0][0];
     console.log(firstBadIndex);
-    $( ".badData" ).append( "<p>"+bodyDataArray[0][firstBadIndex]+" "+bodyDataArray[1][firstBadIndex]+" "+bodyDataArray[2][firstBadIndex]+" "+bodyDataArray[3][firstBadIndex]+" "+bodyDataArray[4][firstBadIndex]+" "+bodyDataArray[5][firstBadIndex]+" "+bodyDataArray[6][firstBadIndex]+" "+bodyDataArray[7][firstBadIndex]+"</p>" );
+    $( ".badData" ).append( "<p style='text-align:left'>"+"Time: "+bodyDataArray[0][firstBadIndex]+" | "+"Last Time:"+bodyDataArray[1][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Latitude: "+bodyDataArray[2][firstBadIndex]+" | "+"Longitude: " +bodyDataArray[3][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Speed: "+bodyDataArray[4][firstBadIndex]+" | "+"Course: "+bodyDataArray[5][firstBadIndex]+" | "+"Altitude: "+bodyDataArray[6][firstBadIndex]+"</p>"+"<p style='text-align:left'>"+"Temperature & Pressure: "+bodyDataArray[7][firstBadIndex]+"</p>" );
     toggleDataCorrectionFields (erroredIndexesAndPosition[erroredIndexLastPosition][0]);
     console.log("Corrected");
     console.log(correctedDataFields);
