@@ -15,7 +15,7 @@ var deleteIndexArray = [];
 var deleteButtonPressed = false;
 
 function readDataFile(e) {
-
+  resetMemDataToInit();
     var file = e.target.files[0];
     if (!file) {
       return;
@@ -83,6 +83,18 @@ function readDataFile(e) {
         
       };
       reader.readAsText(file);
+}
+
+function resetMemDataToInit()
+{
+  headerDataArray = [];
+  bodyDataArray = [];
+  finalBodyDataArray = [];
+  erroredIndexesAndPosition = [];
+  erroredIndexLastPosition = -1;
+  correctedDataFields = [];
+  deleteIndexArray = [];
+  deleteButtonPressed = false;
 }
 
 function parseData()
